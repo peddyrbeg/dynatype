@@ -15,8 +15,7 @@ function preload () {
 
   fonts[0] = loadFont("assets/ITCBLKAD.TTF");
   fonts[1] = loadFont("assets/BKANT.TTF");
-  fonts[2] = loadFont("assets/Gabriola.ttf");
-  fonts[3] = loadFont("assets/calibri.ttf");
+  fonts[2] = loadFont("assets/calibri.ttf");
 
 }
 
@@ -86,10 +85,9 @@ function typeSpeed (c, l) {
 
   s = 0;
 
-  if (c < 10) s = 0;
-  else if (c >= 11 && charSpeed <= 30) s = 1;
-  else if (c >= 31 && charSpeed <= 50) s = 2;
-  else s = 3;
+  if (c < 15) s = 0;
+  else if (c >= 16 && charSpeed <= 25) s = 1;
+  else s = 2;
 
   setChars(s, l);
   
