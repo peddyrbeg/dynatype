@@ -1,9 +1,15 @@
+let cnv;
 let textArea;
 let charStart = 0;
+let charLast = 0;
 let charSpeed = 0;
-let newTxt;
 let fonts = [];
-let first = false;
+let first = true;
+let dispChars = [];
+let index = -1;
+let s = 0;
+let check = /[a-z\s]/i
+let caps;
 
 function preload () {
 
@@ -11,12 +17,16 @@ function preload () {
   fonts[1] = loadFont("assets/BKANT.TTF");
   fonts[2] = loadFont("assets/Gabriola.ttf");
   fonts[3] = loadFont("assets/calibri.ttf");
-  
+
 }
 
 function setup() {
   
-  createCanvas(400, 400);
+  if (displayWidth <= 480) cnv = createCanvas(displayWidth, displayHeight-(displayHeight*0.151));
+  else cnv = createCanvas(320, displayHeight-(displayHeight*0.151));
+  var x = (displayWidth - width) / 2;
+  cnv.position(x);
+
   textArea = createInput("");
   textArea.position(0, height);
   textArea.style("color", "white");
@@ -33,34 +43,71 @@ function setup() {
   
 }
 
-function keyPressed () {
-  
-  if (!first) {
-    first = true;
-    charStart = frameCount;
+function keyPressed (e, l) {
+
+  let keynum;
+
+  if(window.event) { // IE                  
+    keynum = e.keyCode;
+  } else if(e.which){ // Netscape/Firefox/Opera                 
+    keynum = e.which;
   }
-  else {
-    charSpeed = frameCount - charStart;
-    typeSpeed();
-    first = false;
+
+  if (e.shiftKey) caps = true;
+  else caps = false;
+
+  l = String.fromCharCode(keynum);
+
+  if (check.test(l)) {
+    if (first) {
+      first = false;
+      charLast = frameCount;
+      charSpeed = 0;
+    }
+    else {
+      charStart = charLast;
+      charLast = frameCount;
+      charSpeed = charLast - charStart;
+    }
+    typeSpeed(charSpeed, l);
+  }
+
+  if (keynum == 190) typeSpeed(0, ".");
+  else if (keynum == 188) typeSpeed(0, ",");
+
+  if (keynum == 8) {
+    dispChars.splice(dispChars.length-1, 1);
+    xCount--;
   }
   
 }
 
-function typeSpeed () {
+function typeSpeed (c, l) {
 
-  if (charSpeed < 20) textFont(fonts[0]);
-  else if (charSpeed >=20 && charSpeed <= 30) textFont(fonts[1]);
-  else if (charSpeed >= 31 && charSpeed <= 40) textFont(fonts[2]);
-  else if (charSpeed >= 41 && charSpeed <= 50) textFont(fonts[3]);
+  s = 0;
+
+  if (c < 10) s = 0;
+  else if (c >= 11 && charSpeed <= 30) s = 1;
+  else if (c >= 31 && charSpeed <= 50) s = 2;
+  else s = 3;
+
+  setChars(s, l);
   
+}
+
+function setChars (s, l) {
+
+  index++;
+  dispChars.push(new Char(l, 30, 40, s));
+
 }
 
 function draw() {
   
   background(255);
   fill(0);
-  textSize(40);
-  text(textArea.elt.value, 0, 0, 400, 400);
-  
+  textSize(20);
+
+  dispChars.forEach(element => element.display());
+
 }
