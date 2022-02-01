@@ -17,10 +17,9 @@ class Char {
 	}
 
 	display () {
-		if (this.s == 0) textFont(fonts[3]);
-		else if (this.s == 1) textFont(fonts[2]);
-		else if (this.s == 2) textFont(fonts[1]);
-		else if (this.s == 3) textFont(fonts[0]);
+		if (this.s == 0) textFont(fonts[2]);
+		else if (this.s == 1) textFont(fonts[1]);
+		else if (this.s == 2) textFont(fonts[0]);
 		text(this.c, this.x, this.y);
 	}
 
